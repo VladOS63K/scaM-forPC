@@ -1,3 +1,4 @@
+using Aspose.Zip;
 using Octokit;
 using System.Diagnostics;
 using System.IO.Compression;
@@ -41,13 +42,32 @@ namespace Updater
             await Task.Delay(100);
             ProgressBar.Value = 50;
             string unpackPath = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(System.Windows.Forms.Application.StartupPath)));
+            MessageBox.Show(unpackPath);
             FileStream fs = File.Create(System.Windows.Forms.Application.StartupPath + "\\Updater_Temp.zip");
             await archiveStream.CopyToAsync(fs);
             fs.Close();
             archiveStream.Close();
-            ZipArchive arc = ZipFile.OpenRead(System.Windows.Forms.Application.StartupPath + "\\Updater_Temp.zip");
-            arc.ExtractToDirectory(unpackPath, true);
+            Archive arc = new Archive(System.Windows.Forms.Application.StartupPath + "\\Updater_Temp.zip");
+            ArchiveEntry ae = null;
+            foreach (ArchiveEntry ee in arc.Entries)
+            {
+                if (ee.Name == "Updater/")
+                {
+                    ae = ee;
+                    break;
+                }
+                else
+                {
+                    ae = null;
+                }
+            }
+            if (ae != null) arc.DeleteEntry(ae);
+            arc.Save(System.Windows.Forms.Application.StartupPath + "\\Updater_Temp.zip");
+            arc.Dispose();
+            arc = new Archive(System.Windows.Forms.Application.StartupPath + "\\Updater_Temp.zip");
+            arc.ExtractToDirectory(unpackPath);
             await Task.Delay(500);
+            arc.Dispose();
             ProgressBar.Value = 100;
             LabelStatus.Text = $"ќбновление завершено! скаћ был запущен.";
             Process.Start(unpackPath + "\\scaM-forPC.exe");
