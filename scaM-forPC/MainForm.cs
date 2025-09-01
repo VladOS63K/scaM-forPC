@@ -1,5 +1,8 @@
 using Newtonsoft.Json;
+using Octokit;
 using System.Diagnostics;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using VladOSLauncher;
 
 namespace scaM_forPC
@@ -36,11 +39,42 @@ namespace scaM_forPC
         {
             if (InvokeRequired)
             {
-                Invoke(new MethodInvoker(StateRefresh));
+                Invoke(new System.Windows.Forms.MethodInvoker(StateRefresh));
                 return;
             }
             WebView2Message msg = new WebView2Message("state", isRunning);
             WebView.CoreWebView2.PostWebMessageAsJson(JsonConvert.SerializeObject(msg));
+        }
+
+        async void CheckUpdates()
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new System.Windows.Forms.MethodInvoker(CheckUpdates));
+                return;
+            }
+            try
+            {
+                string ver = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                Match m = Regex.Match(ver, @"(\d+\.\d+\.\d+)\.\d+");
+                var client = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("VladOS63K"));
+                var release = await client.Repository.Release.GetLatest("VladOS63K", "scaM-forPC");
+                Debug.WriteLine(m.Groups[1].Value);
+                if (m.Groups[1].Value != release.TagName)
+                {
+                    WebView2Message msg = new WebView2Message("updateavailable", release.TagName);
+                    WebView.CoreWebView2.PostWebMessageAsJson(JsonConvert.SerializeObject(msg));
+                    Debug.WriteLine("Update " + m.Groups[1].Value + "is available!");
+                }
+                else
+                {
+                    Debug.WriteLine("No updates available!");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Произошла ошибка при проверке обновлений...\n\n" + ex.ToString(), "скаМ");
+            }
         }
 
         private async void Form1_Load(object sender, EventArgs e)
@@ -68,10 +102,14 @@ namespace scaM_forPC
                     case "settings":
                         new SettingsForm().ShowDialog();
                         break;
+                    case "update":
+                        Process.Start(System.Windows.Forms.Application.StartupPath + "\\Updater\\net8.0-windows\\Updater.exe");
+                        break;
                 }
             }
             catch (Exception ex)
             {
+                MessageBox.Show(ex.ToString());
                 Debug.WriteLine("Error processing WebView2 message: " + ex.ToString());
             }
         }
@@ -114,7 +152,7 @@ namespace scaM_forPC
                 if (msg == DialogResult.No) return;
             }
             isRunning = false;
-            Application.Exit();
+            System.Windows.Forms.Application.Exit();
         }
 
         private async void MAXStartWatcher_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
@@ -166,6 +204,7 @@ namespace scaM_forPC
         private void webView21_NavigationCompleted(object sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs e)
         {
             StateRefresh();
+            CheckUpdates();
         }
     }
 }

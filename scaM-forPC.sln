@@ -1,20 +1,31 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36203.30 d17.14
+VisualStudioVersion = 17.14.36203.30
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "scaM-forPC", "scaM-forPC\scaM-forPC.csproj", "{AD29E0EA-C29D-46E1-8CE6-7039714078B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Updater", "Updater\Updater.csproj", "{1C1E5038-06C6-448D-9B05-D5D1365E1D2E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		Updater|Any CPU = Updater|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{AD29E0EA-C29D-46E1-8CE6-7039714078B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AD29E0EA-C29D-46E1-8CE6-7039714078B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD29E0EA-C29D-46E1-8CE6-7039714078B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD29E0EA-C29D-46E1-8CE6-7039714078B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD29E0EA-C29D-46E1-8CE6-7039714078B8}.Updater|Any CPU.ActiveCfg = Release|Any CPU
+		{AD29E0EA-C29D-46E1-8CE6-7039714078B8}.Updater|Any CPU.Build.0 = Release|Any CPU
+		{1C1E5038-06C6-448D-9B05-D5D1365E1D2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C1E5038-06C6-448D-9B05-D5D1365E1D2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C1E5038-06C6-448D-9B05-D5D1365E1D2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C1E5038-06C6-448D-9B05-D5D1365E1D2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C1E5038-06C6-448D-9B05-D5D1365E1D2E}.Updater|Any CPU.ActiveCfg = Updater|Any CPU
+		{1C1E5038-06C6-448D-9B05-D5D1365E1D2E}.Updater|Any CPU.Build.0 = Updater|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
