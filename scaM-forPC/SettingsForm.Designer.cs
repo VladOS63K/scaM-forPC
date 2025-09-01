@@ -96,10 +96,10 @@
             CancelButton = button1;
             ClientSize = new Size(348, 297);
             ControlBox = false;
-            Controls.Add(checkBox2);
-            Controls.Add(pictureBox1);
-            Controls.Add(button2);
             Controls.Add(button1);
+            Controls.Add(button2);
+            Controls.Add(pictureBox1);
+            Controls.Add(checkBox2);
             Controls.Add(label1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Name = "SettingsForm";

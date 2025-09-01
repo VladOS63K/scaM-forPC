@@ -30,37 +30,31 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            webView21 = new Microsoft.Web.WebView2.WinForms.WebView2();
-            HTTPServer = new System.ComponentModel.BackgroundWorker();
+            WebView = new Microsoft.Web.WebView2.WinForms.WebView2();
             TrayIcon = new NotifyIcon(components);
             TrayMenuStrip = new ContextMenuStrip(components);
             показатьСкаМToolStripMenuItem = new ToolStripMenuItem();
             закрытьСкаМToolStripMenuItem = new ToolStripMenuItem();
             MAXStartWatcher = new System.ComponentModel.BackgroundWorker();
-            ((System.ComponentModel.ISupportInitialize)webView21).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)WebView).BeginInit();
             TrayMenuStrip.SuspendLayout();
             SuspendLayout();
             // 
-            // webView21
+            // WebView
             // 
-            webView21.AllowExternalDrop = true;
-            webView21.CreationProperties = null;
-            webView21.DefaultBackgroundColor = Color.Transparent;
-            webView21.Dock = DockStyle.Fill;
-            webView21.Location = new Point(0, 0);
-            webView21.Name = "webView21";
-            webView21.Size = new Size(375, 541);
-            webView21.Source = new Uri("http://127.0.0.1:9378/files/main.html", UriKind.Absolute);
-            webView21.TabIndex = 0;
-            webView21.ZoomFactor = 1D;
-            webView21.CoreWebView2InitializationCompleted += webView21_CoreWebView2InitializationCompleted;
-            webView21.NavigationCompleted += webView21_NavigationCompleted;
-            webView21.WebMessageReceived += webView21_WebMessageReceived;
-            // 
-            // HTTPServer
-            // 
-            HTTPServer.WorkerSupportsCancellation = true;
-            HTTPServer.DoWork += backgroundWorker1_DoWork;
+            WebView.AllowExternalDrop = true;
+            WebView.CreationProperties = null;
+            WebView.DefaultBackgroundColor = Color.Transparent;
+            WebView.Dock = DockStyle.Fill;
+            WebView.Location = new Point(0, 0);
+            WebView.Name = "WebView";
+            WebView.Size = new Size(375, 541);
+            WebView.Source = new Uri("https://vlados63k.github.io/scaM-forPC-ui/main.html", UriKind.Absolute);
+            WebView.TabIndex = 0;
+            WebView.ZoomFactor = 1D;
+            WebView.CoreWebView2InitializationCompleted += webView21_CoreWebView2InitializationCompleted;
+            WebView.NavigationCompleted += webView21_NavigationCompleted;
+            WebView.WebMessageReceived += webView21_WebMessageReceived;
             // 
             // TrayIcon
             // 
@@ -99,25 +93,25 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Black;
             ClientSize = new Size(375, 541);
-            Controls.Add(webView21);
+            Controls.Add(WebView);
             ForeColor = Color.White;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
+            MinimizeBox = false;
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "скаМ";
             FormClosing += Form1_FormClosing;
             Load += Form1_Load;
-            ((System.ComponentModel.ISupportInitialize)webView21).EndInit();
+            ((System.ComponentModel.ISupportInitialize)WebView).EndInit();
             TrayMenuStrip.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
 
-        private Microsoft.Web.WebView2.WinForms.WebView2 webView21;
-        private System.ComponentModel.BackgroundWorker HTTPServer;
+        private Microsoft.Web.WebView2.WinForms.WebView2 WebView;
         private NotifyIcon TrayIcon;
         private ContextMenuStrip TrayMenuStrip;
         private ToolStripMenuItem показатьСкаМToolStripMenuItem;

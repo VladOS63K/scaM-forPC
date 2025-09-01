@@ -1,10 +1,5 @@
-using HtmlAgilityPack;
 using Newtonsoft.Json;
 using System.Diagnostics;
-using System.Net;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using VladOSLauncher;
 
 namespace scaM_forPC
@@ -35,22 +30,7 @@ namespace scaM_forPC
 
         }
 
-        HttpListener server;
-
         bool isRunning = false;
-
-        protected override void WndProc(ref Message m)
-        {
-            if (m.Msg == 0x0005)
-            {
-                if (this.WindowState == FormWindowState.Minimized)
-                {
-                    this.Hide();
-                }
-            }
-
-            base.WndProc(ref m);
-        }
 
         void StateRefresh()
         {
@@ -60,22 +40,13 @@ namespace scaM_forPC
                 return;
             }
             WebView2Message msg = new WebView2Message("state", isRunning);
-            webView21.CoreWebView2.PostWebMessageAsJson(JsonConvert.SerializeObject(msg));
+            WebView.CoreWebView2.PostWebMessageAsJson(JsonConvert.SerializeObject(msg));
         }
 
         private async void Form1_Load(object sender, EventArgs e)
         {
-            server = new HttpListener();
-            server.Prefixes.Add("http://127.0.0.1:9378/files/");
-
-            server.Start();
-
             isRunning = Properties.Settings.Default.IsRunning;
-
-            HTTPServer.RunWorkerAsync();
-            
-
-            webView21.EnsureCoreWebView2Async();// await CoreWebView2Environment.CreateAsync(Application.StartupPath + "\\BrowserExec", Application.StartupPath + "\\BrowserData"));
+            WebView.EnsureCoreWebView2Async();// await CoreWebView2Environment.CreateAsync(Application.StartupPath + "\\BrowserExec", Application.StartupPath + "\\BrowserData"));
         }
 
         private async void webView21_WebMessageReceived(object sender, Microsoft.Web.WebView2.Core.CoreWebView2WebMessageReceivedEventArgs e)
@@ -116,57 +87,8 @@ namespace scaM_forPC
             }
             MAXStartWatcher.RunWorkerAsync();
             //webView21.CoreWebView2.Settings.AreDevToolsEnabled = false;
-            webView21.CoreWebView2.Settings.IsBuiltInErrorPageEnabled = false;
-            webView21.CoreWebView2.Settings.IsPasswordAutosaveEnabled = false;
-        }
-
-        private async void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
-        {
-            while (true)
-            {
-                HttpListenerContext context = await server.GetContextAsync();
-
-                var request = context.Request;
-                var response = context.Response;
-                var userAgent = request.UserAgent;
-                try
-                {
-                    response.ContentEncoding = Encoding.UTF8;
-                    if (request.RawUrl.StartsWith("/files/"))
-                    {
-                        string filePath = "files\\" + request.RawUrl.Substring(1).Replace("files/", "").Replace('/', '\\');
-                        Debug.Write($"Sending file {filePath}... ");
-                        if (File.Exists(filePath))
-                        {
-                            response.StatusCode = 200;
-                            byte[] respBytes = File.ReadAllBytes(filePath);
-                            response.ContentLength64 = respBytes.Length;
-                            await response.OutputStream.WriteAsync(respBytes, 0, respBytes.Length);
-                            await response.OutputStream.FlushAsync();
-                            Debug.WriteLine("done");
-                        }
-                        else
-                        {
-                            response.StatusCode = 404;
-                            byte[] respBytes = new byte[2048];
-                            respBytes = Encoding.UTF8.GetBytes("404 Not Found");
-                            response.ContentLength64 = respBytes.Length;
-                            await response.OutputStream.WriteAsync(respBytes, 0, respBytes.Length);
-                            await response.OutputStream.FlushAsync();
-                            Debug.WriteLine("file not found");
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine("Error:" + ex.Message);
-                    response.StatusCode = 500;
-                    byte[] respBytes = new byte[2048];
-                    respBytes = Encoding.UTF8.GetBytes("500 Internal Server Error\n\n" + ex.ToString());
-                    await response.OutputStream.WriteAsync(respBytes, 0, respBytes.Length);
-                    await response.OutputStream.FlushAsync();
-                }
-            }
+            WebView.CoreWebView2.Settings.IsBuiltInErrorPageEnabled = false;
+            WebView.CoreWebView2.Settings.IsPasswordAutosaveEnabled = false;
         }
 
         private void показатьСкаМToolStripMenuItem_Click(object sender, EventArgs e)
@@ -188,7 +110,7 @@ namespace scaM_forPC
         {
             if (isRunning)
             {
-                DialogResult msg = MessageBox.Show("скаМ включен! Хотите отключить блокировку и выйти?", "скаМ", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                DialogResult msg = MessageBox.Show("скаМ сейчас включен! Хотите выйти?", "скаМ", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (msg == DialogResult.No) return;
             }
             isRunning = false;
@@ -234,7 +156,7 @@ namespace scaM_forPC
                     }
                     if (procs.Length != 0 || procs1.Length != 0)
                     {
-                        MessageBox.Show("Невозможно запустить MAX, так как отсутствует файл msvcp140.dll. Попробуйте переустановить MAX.", "max.exe", MessageBoxButtons.OK, MessageBoxIcon.Error,MessageBoxDefaultButton.Button1,MessageBoxOptions.ServiceNotification);
+                        MessageBox.Show("Невозможно запустить MAX, так как отсутствует файл msvcp140.dll. Попробуйте переустановить MAX.", "max.exe", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification);
                     }
                 }
                 await Task.Delay(1000);

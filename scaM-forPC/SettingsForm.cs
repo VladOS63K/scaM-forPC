@@ -44,7 +44,6 @@ namespace scaM_forPC
         private void label1_Click(object sender, EventArgs e)
         {
             pictureBox1.Location = new Point(0, 0);
-            pictureBox1.BringToFront();
         }
 
         private void SettingsForm_Load(object sender, EventArgs e)
