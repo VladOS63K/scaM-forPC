@@ -30,7 +30,6 @@ namespace scaM_forPC
                     this.Hide();
                 }
             }
-
         }
 
         bool isRunning = false;
@@ -59,16 +58,15 @@ namespace scaM_forPC
                 Match m = Regex.Match(ver, @"(\d+\.\d+\.\d+)\.\d+");
                 var client = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("VladOS63K"));
                 var release = await client.Repository.Release.GetLatest("VladOS63K", "scaM-forPC");
-                Debug.WriteLine(m.Groups[1].Value);
                 if (m.Groups[1].Value != release.TagName)
                 {
                     WebView2Message msg = new WebView2Message("updateavailable", release.TagName);
                     WebView.CoreWebView2.PostWebMessageAsJson(JsonConvert.SerializeObject(msg));
-                    Debug.WriteLine("Update " + m.Groups[1].Value + "is available!");
+                    Debug.WriteLine(m.Groups[1].Value+" - Update " + release.TagName + " is available!");
                 }
                 else
                 {
-                    Debug.WriteLine("No updates available!");
+                    Debug.WriteLine(m.Groups[1].Value+" - No updates available!");
                 }
             }
             catch (Exception ex)
@@ -103,7 +101,8 @@ namespace scaM_forPC
                         new SettingsForm().ShowDialog();
                         break;
                     case "update":
-                        Process.Start(System.Windows.Forms.Application.StartupPath + "\\Updater\\net8.0-windows\\Updater.exe");
+                        //Process.Start(System.Windows.Forms.Application.StartupPath + "\\Updater\\net8.0-windows\\Updater.exe");
+                        new UpdateForm().Show();
                         break;
                 }
             }
