@@ -24,7 +24,6 @@ namespace Updater
             this.Refresh();
             client = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("VladOS63K"));
             release = await client.Repository.Release.GetLatest("VladOS63K", "scaM-forPC");
-            Debug.WriteLine(release.Assets[0].Url);
             HttpClient hcl = new HttpClient();
             string downloadurl = $"https://github.com/VladOS63K/scaM-forPC/releases/download/{release.TagName}/scaM-forPC-{release.TagName}.zip";
             LabelStatus.Text = "URL получен! Начинаю загрузку...";
@@ -42,7 +41,6 @@ namespace Updater
             await Task.Delay(100);
             ProgressBar.Value = 50;
             string unpackPath = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(System.Windows.Forms.Application.StartupPath)));
-            MessageBox.Show(unpackPath);
             FileStream fs = File.Create(System.Windows.Forms.Application.StartupPath + "\\Updater_Temp.zip");
             await archiveStream.CopyToAsync(fs);
             fs.Close();
